@@ -15,6 +15,7 @@ import ViewsBindings from 'views/bindings';
 PluginStore.register(new PluginManifest({}, ViewsBindings));
 
 Promise.config({ cancellation: true });
+
 Reflux.setPromiseFactory((handlers) => new Promise(handlers));
 
 function renderAppContainer(appContainer) {
@@ -30,6 +31,7 @@ function renderAppContainer(appContainer) {
 
 window.onload = () => {
   const appContainer = document.createElement('div');
+
   document.body.appendChild(appContainer);
 
   renderAppContainer(appContainer);
