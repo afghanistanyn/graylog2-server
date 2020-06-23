@@ -1,6 +1,6 @@
 // @flow strict
 import React from 'react';
-import { render, wait, fireEvent, cleanup, waitForElement } from 'wrappedTestingLibrary';
+import { render, waitFor, fireEvent, cleanup } from 'wrappedTestingLibrary';
 import { browserHistory } from 'react-router';
 import { Map } from 'immutable';
 import mockComponent from 'helpers/mocking/MockComponent';
@@ -172,8 +172,8 @@ describe('<Widget />', () => {
               {...props} />
 
     );
-    const { getByText } = render(<UnknownWidget data={[]} />);
-    await waitForElement(() => getByText('Unknown widget'));
+    const { findByText } = render(<UnknownWidget data={[]} />);
+    await findByText('Unknown widget');
   });
   it('renders placeholder in edit mode if widget type is unknown', async () => {
     const unknownWidget = { config: {}, id: 'widgetId', type: 'i-dont-know-this-widget-type' };
@@ -189,8 +189,8 @@ describe('<Widget />', () => {
               {...props} />
 
     );
-    const { getByText } = render(<UnknownWidget data={[]} />);
-    await waitForElement(() => getByText('Unknown widget in edit mode'));
+    const { findByText } = render(<UnknownWidget data={[]} />);
+    await findByText('Unknown widget in edit mode');
   });
 
   it('copies title when duplicating widget', (done) => {
@@ -312,23 +312,23 @@ describe('<Widget />', () => {
 
     it('should get dashboard from backend', async () => {
       renderAndClick();
-      await wait(() => expect(ViewManagementActions.get).toHaveBeenCalledTimes(1));
+      await waitFor(() => expect(ViewManagementActions.get).toHaveBeenCalledTimes(1));
       expect(ViewManagementActions.get).toHaveBeenCalledWith('view-1');
     });
     it('should get corresponding search to dashboard', async () => {
       renderAndClick();
-      await wait(() => expect(SearchActions.get).toHaveBeenCalledTimes(1));
+      await waitFor(() => expect(SearchActions.get).toHaveBeenCalledTimes(1));
       expect(SearchActions.get).toHaveBeenCalledWith('search-1');
     });
     it('should create new search for dashboard', async () => {
       renderAndClick();
-      await wait(() => expect(SearchActions.create).toHaveBeenCalledTimes(1));
+      await waitFor(() => expect(SearchActions.create).toHaveBeenCalledTimes(1));
       expect(SearchActions.create).toHaveBeenCalledWith(Search.builder().id('search-id').parameters([]).queries([])
         .build());
     });
     it('should update dashboard with new search and widget', async () => {
       renderAndClick();
-      await wait(() => expect(ViewManagementActions.update).toHaveBeenCalledTimes(1));
+      await waitFor(() => expect(ViewManagementActions.update).toHaveBeenCalledTimes(1));
       expect(ViewManagementActions.update).toHaveBeenCalledWith(
         View.builder()
           .search(Search.builder().id('search-1').build())
@@ -338,7 +338,7 @@ describe('<Widget />', () => {
     });
     it('should redirect to updated dashboard', async () => {
       renderAndClick();
-      await wait(() => expect(browserHistory.push).toHaveBeenCalledTimes(1));
+      await waitFor(() => expect(browserHistory.push).toHaveBeenCalledTimes(1));
       expect(browserHistory.push).toHaveBeenCalledWith('DASHBOARDS_VIEWID-view-1');
     });
   });

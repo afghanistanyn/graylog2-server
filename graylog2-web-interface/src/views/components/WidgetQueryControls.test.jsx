@@ -1,6 +1,6 @@
 // @flow strict
 import * as React from 'react';
-import { asElement, render, waitForElement, cleanup, fireEvent, wait } from 'wrappedTestingLibrary';
+import { asElement, render, waitForElement, cleanup, fireEvent, waitFor } from 'wrappedTestingLibrary';
 import selectEvent from 'react-select-event';
 import WrappingContainer from 'WrappingContainer';
 
@@ -90,7 +90,7 @@ describe('WidgetQueryControls', () => {
       const { getByTestId } = renderSUT({ globalOverride: globalOverrideWithQuery });
       const resetFilterButton = await waitForElement(() => getByTestId('reset-filter'));
       fireEvent.click(resetFilterButton);
-      await wait(() => expect(SearchActions.refresh).toHaveBeenCalled());
+      await waitFor(() => expect(SearchActions.refresh).toHaveBeenCalled());
     });
 
     it('emptying `globalOverride` prop removes notification', async () => {
@@ -125,7 +125,7 @@ describe('WidgetQueryControls', () => {
     const searchButton = getByTitle(/Perform search/);
     fireEvent.click(searchButton);
 
-    await wait(() => expect(WidgetActions.update).toHaveBeenCalledWith('deadbeef', expect.objectContaining({
+    await waitFor(() => expect(WidgetActions.update).toHaveBeenCalledWith('deadbeef', expect.objectContaining({
       timerange: { type: 'relative', range: 0 },
     })));
   });
@@ -140,7 +140,7 @@ describe('WidgetQueryControls', () => {
     const searchButton = getByTitle(/Perform search/);
     fireEvent.click(searchButton);
 
-    await wait(() => expect(WidgetActions.update)
+    await waitFor(() => expect(WidgetActions.update)
       .toHaveBeenLastCalledWith('deadbeef', expect.objectContaining({
         timerange: {
           type: 'absolute',
@@ -168,7 +168,7 @@ describe('WidgetQueryControls', () => {
     const searchButton = getByTitle(/Perform search/);
     fireEvent.click(searchButton);
 
-    await wait(() => expect(WidgetActions.update).toHaveBeenCalledWith('deadbeef', expect.objectContaining({
+    await waitFor(() => expect(WidgetActions.update).toHaveBeenCalledWith('deadbeef', expect.objectContaining({
       streams: ['5c2e27d6ba33a9681ad62775'],
     })));
   });

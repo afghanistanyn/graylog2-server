@@ -1,6 +1,6 @@
 // @flow strict
 import React from 'react';
-import { render, fireEvent, wait, cleanup } from 'wrappedTestingLibrary';
+import { render, fireEvent, waitFor, cleanup } from 'wrappedTestingLibrary';
 import { StoreMock as MockStore } from 'helpers/mocking';
 import asMock from 'helpers/mocking/AsMock';
 
@@ -101,13 +101,13 @@ describe('MigrateFieldCharts', () => {
     it('execute search, when finished', async () => {
       Store.get.mockImplementation(mockStoreGet());
       renderAndMigrate();
-      await wait(() => expect(SearchActions.executeWithCurrentState).toHaveBeenCalled());
+      await waitFor(() => expect(SearchActions.executeWithCurrentState).toHaveBeenCalled());
     });
 
     it('hide alert, when finished', async () => {
       Store.get.mockImplementation(mockStoreGet());
       const { queryByText } = renderAndMigrate();
-      await wait(() => expect(queryByText('Migrate existing search page charts')).toBeNull());
+      await waitFor(() => expect(queryByText('Migrate existing search page charts')).toBeNull());
       expect(Store.set).toHaveBeenCalledWith('pinned-field-charts-migrated', 'finished');
     });
 
@@ -120,7 +120,7 @@ describe('MigrateFieldCharts', () => {
       Store.get.mockImplementation(mockStoreGet());
       renderAndMigrate();
       const actionMock = asMock(ViewStatesActions.update);
-      await wait(() => expect(actionMock.mock.calls[0][1].widgets.size).toEqual(3));
+      await waitFor(() => expect(actionMock.mock.calls[0][1].widgets.size).toEqual(3));
       expect(getNewWidgetPos(actionMock)).toEqual(expWidgetPos);
     });
 
@@ -128,61 +128,61 @@ describe('MigrateFieldCharts', () => {
       const expPivotConfig = { interval: { type: 'timeunit', unit: 'months', value: 3 } };
       Store.get.mockImplementation(mockStoreGet({ interval: 'quarter' }));
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).rowPivots[0].config).toEqual(expPivotConfig));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).rowPivots[0].config).toEqual(expPivotConfig));
     });
 
     it('create row pivot with interval unit months, if field chart interval is month', async () => {
       const expPivotConfig = { interval: { type: 'timeunit', unit: 'months', value: 1 } };
       Store.get.mockImplementation(mockStoreGet({ interval: 'month' }));
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).rowPivots[0].config).toEqual(expPivotConfig));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).rowPivots[0].config).toEqual(expPivotConfig));
       expect(getNewWidgetConfig(ViewStatesActions.update).rowPivots[0].config).toEqual(expPivotConfig);
     });
 
     it('set visualization to scatter, if field chart visualization is scatter', async () => {
       Store.get.mockImplementation(mockStoreGet({ renderer: 'scatterplot' }));
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualization).toEqual('scatter'));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualization).toEqual('scatter'));
     });
 
     it('set visualization to line, if field chart visualization is line', async () => {
       Store.get.mockImplementation(mockStoreGet({ renderer: 'line' }));
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualization).toEqual('line'));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualization).toEqual('line'));
     });
 
     it('create visualization config with interpolation spline, if field chart interpolation is bundle', async () => {
       const expVisualizationConfg = new LineVisualizationConfig('spline');
       Store.get.mockImplementation(mockStoreGet({ interpolation: 'bundle' }));
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualizationConfig).toEqual(expVisualizationConfg));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualizationConfig).toEqual(expVisualizationConfg));
     });
 
     it('create visualization config with interpolation linear, if field chart interpolation is linear', async () => {
       const expVisualizationConfg = new LineVisualizationConfig('linear');
       Store.get.mockImplementation(mockStoreGet({ interpolation: 'linear' }));
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualizationConfig).toEqual(expVisualizationConfg));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualizationConfig).toEqual(expVisualizationConfg));
     });
 
     it('create area visualization config, if field chart visualization is area', async () => {
       const expVisualizationConfg = new AreaVisualizationConfig('linear');
       Store.get.mockImplementation(mockStoreGet({ renderer: 'area' }));
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualizationConfig).toEqual(expVisualizationConfg));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualizationConfig).toEqual(expVisualizationConfg));
     });
 
     it('create line visualization config, if field chart visualization is line', async () => {
       const expVisualizationConfg = new LineVisualizationConfig('linear');
       Store.get.mockImplementation(mockStoreGet({ renderer: 'line' }));
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualizationConfig).toEqual(expVisualizationConfg));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualizationConfig).toEqual(expVisualizationConfg));
     });
 
     it('create no visualization config, if field chart visualization is not line or area', async () => {
       Store.get.mockImplementation(mockStoreGet({ renderer: 'bar' }));
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualizationConfig).toEqual(undefined));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).visualizationConfig).toEqual(undefined));
       expect(getNewWidgetConfig(ViewStatesActions.update).visualization).toEqual('bar');
     });
 
@@ -190,28 +190,28 @@ describe('MigrateFieldCharts', () => {
       Store.get.mockImplementation(mockStoreGet({ valuetype: 'count', field: 'messageCount' }));
       const newSeries = [new Series('count(messageCount)')];
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).series).toEqual(newSeries));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).series).toEqual(newSeries));
     });
 
     it('create series config with sum, if field chart series is total', async () => {
       Store.get.mockImplementation(mockStoreGet({ valuetype: 'total' }));
       const newSeries = [new Series('sum(level)')];
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).series).toEqual(newSeries));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).series).toEqual(newSeries));
     });
 
     it('create series config with avg, if field chart series is mean', async () => {
       Store.get.mockImplementation(mockStoreGet({ valuetype: 'mean' }));
       const newSeries = [new Series('avg(level)')];
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).series).toEqual(newSeries));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).series).toEqual(newSeries));
     });
 
     it('create series config with car, if field chart series is cardinality', async () => {
       Store.get.mockImplementation(mockStoreGet({ valuetype: 'cardinality' }));
       const newSeries = [new Series('card(level)')];
       renderAndMigrate();
-      await wait(() => expect(getNewWidgetConfig(ViewStatesActions.update).series).toEqual(newSeries));
+      await waitFor(() => expect(getNewWidgetConfig(ViewStatesActions.update).series).toEqual(newSeries));
     });
   });
 });
