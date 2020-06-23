@@ -1,6 +1,6 @@
 // @flow strict
 import React, { useEffect } from 'react';
-import { cleanup, render, waitForElement } from 'wrappedTestingLibrary';
+import { cleanup, render } from 'wrappedTestingLibrary';
 import suppressConsole from 'helpers/suppressConsole';
 
 import WidgetOverrideElements from './WidgetOverrideElements';
@@ -10,20 +10,20 @@ jest.mock('views/logic/withPluginEntities', () => (x) => x);
 describe('WidgetOverrideElements', () => {
   afterEach(cleanup);
   it('renders original children if no elements are present', async () => {
-    const { getByText } = render((
+    const { findByText } = render((
       <WidgetOverrideElements widgetOverrideElements={[]}>
         <span>Hello world!</span>
       </WidgetOverrideElements>
     ));
-    await waitForElement(() => getByText('Hello world!'));
+    await findByText('Hello world!');
   });
   it('renders original children if element does not throw', async () => {
-    const { getByText } = render((
+    const { findByText } = render((
       <WidgetOverrideElements widgetOverrideElements={[() => null]}>
         <span>Hello world!</span>
       </WidgetOverrideElements>
     ));
-    await waitForElement(() => getByText('Hello world!'));
+    await findByText('Hello world!');
   });
   it('propagates thrown errors', async () => {
     suppressConsole(async () => {
@@ -43,12 +43,12 @@ describe('WidgetOverrideElements', () => {
       useEffect(() => override(Component), []);
       return null;
     };
-    const { getByText, queryByText } = render((
+    const { findByText, queryByText } = render((
       <WidgetOverrideElements widgetOverrideElements={[OverridingElement]}>
         <span>Hello world!</span>
       </WidgetOverrideElements>
     ));
-    await waitForElement(() => getByText('I was thrown!'));
+    await findByText('I was thrown!');
     expect(queryByText('Hello world!')).toBeNull();
   });
 });
