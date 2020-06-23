@@ -1,6 +1,6 @@
 // @flow strict
 import * as React from 'react';
-import { render, cleanup, waitForElement, waitFor } from 'wrappedTestingLibrary';
+import { render, cleanup, waitFor } from 'wrappedTestingLibrary';
 import asMock from 'helpers/mocking/AsMock';
 import { act } from 'react-dom/test-utils';
 
@@ -34,11 +34,11 @@ describe('NewDashboardPage', () => {
   });
 
   it('shows loading spinner before rendering page', async () => {
-    const { getByText } = render(<SimpleNewDashboardPage />);
+    const { findByText, getByText } = render(<SimpleNewDashboardPage />);
 
     act(() => jest.advanceTimersByTime(200));
     expect(getByText('Loading...')).not.toBeNull();
-    await waitForElement(() => getByText('Extended search page'));
+    await findByText('Extended search page');
   });
 
   it('should create new view with type dashboard on mount', async () => {
@@ -54,11 +54,11 @@ describe('NewDashboardPage', () => {
       .createdAt(new Date('2019-10-16T14:38:44.681Z'))
       .build();
 
-    const { getByText } = render((
+    const { findByText } = render((
       <SimpleNewDashboardPage location={{ state: { view } }} />
     ));
 
-    await waitForElement(() => getByText('Extended search page'));
+    await findByText('Extended search page');
     expect(loedViewMock).toHaveBeenCalledTimes(1);
     expect(loedViewMock.mock.calls[0][0].type).toStrictEqual(View.Type.Dashboard);
   });
@@ -69,7 +69,7 @@ describe('NewDashboardPage', () => {
       .createdAt(new Date('2019-10-16T14:38:44.681Z'))
       .build();
 
-    const { getByText } = render((
+    const { findByText } = render((
       <SimpleNewDashboardPage location={{
         state: { view },
         query: {
@@ -80,7 +80,7 @@ describe('NewDashboardPage', () => {
       }} />
     ));
 
-    await waitForElement(() => getByText('Extended search page'));
+    await findByText('Extended search page');
     expect(processHooksAction).toBeCalledTimes(1);
     expect(processHooksAction.mock.calls[0][3]).toStrictEqual({ q: '', rangetype: 'relative', relative: '300' });
   });
@@ -91,11 +91,11 @@ describe('NewDashboardPage', () => {
       .build()
       .toJSON();
 
-    const { getByText } = render((
+    const { findByText } = render((
       <SimpleNewDashboardPage location={{ state: { view } }} />
     ));
 
-    await waitForElement(() => getByText('Extended search page'));
+    await findByText('Extended search page');
     expect(ViewActions.load).toHaveBeenCalledTimes(0);
   });
 });
