@@ -1,6 +1,6 @@
 // @flow strict
 import * as React from 'react';
-import { render, cleanup, waitFor } from 'wrappedTestingLibrary';
+import { render, waitFor } from 'wrappedTestingLibrary';
 import { StoreMock as MockStore } from 'helpers/mocking';
 
 import { RefreshActions } from 'views/stores/RefreshStore';
@@ -12,7 +12,6 @@ const mockView = View.builder()
   .id('view-id')
   .title('view title')
   .build();
-
 
 jest.mock('react-router', () => ({ withRouter: (x) => x }));
 jest.mock('views/stores/RefreshStore', () => ({
@@ -47,7 +46,6 @@ describe('ShowDashboardInBigDisplayMode should', () => {
   });
 
   afterEach(() => {
-    cleanup();
     jest.clearAllMocks();
   });
 

@@ -1,6 +1,6 @@
 // @flow strict
 import * as React from 'react';
-import { cleanup, render, fireEvent, waitFor } from 'wrappedTestingLibrary';
+import { render, fireEvent, waitFor } from 'wrappedTestingLibrary';
 import * as Immutable from 'immutable';
 import asMock from 'helpers/mocking/AsMock';
 import selectEvent from 'react-select-event';
@@ -102,7 +102,6 @@ describe('CSVExportModal', () => {
   };
 
   afterEach(() => {
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -127,7 +126,6 @@ describe('CSVExportModal', () => {
     fields: Immutable.List(),
     view: viewWithoutWidget(View.Type.Search),
   };
-
 
   it('should provide current execution state on export', async () => {
     const exportSearchMessagesAction = asMock(exportSearchMessages);
@@ -177,7 +175,6 @@ describe('CSVExportModal', () => {
     await waitFor(() => expect(closeModalStub).toHaveBeenCalledTimes(1));
   });
 
-
   it('initial fields should not contain the message field if message list config showMessageRow is false', async () => {
     const exportSearchTypeMessagesAction = asMock(exportSearchTypeMessages);
     const widgetConfig = new MessagesWidgetConfig(['level', 'http_method'], false, [], []);
@@ -210,7 +207,6 @@ describe('CSVExportModal', () => {
       'Widget-1-search-result',
     );
   });
-
 
   describe('on search page', () => {
     const SearchCSVExportModal = (props) => (

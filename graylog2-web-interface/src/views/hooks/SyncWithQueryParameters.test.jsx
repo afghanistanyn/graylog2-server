@@ -1,6 +1,6 @@
 // @flow strict
 import * as React from 'react';
-import { cleanup, render } from 'wrappedTestingLibrary';
+import { render } from 'wrappedTestingLibrary';
 import * as Immutable from 'immutable';
 import asMock from 'helpers/mocking/AsMock';
 
@@ -128,7 +128,6 @@ describe('SyncWithQueryParameters', () => {
     });
   });
   describe('useSyncWithQueryParameters', () => {
-    afterEach(cleanup);
     const TestComponent = () => {
       useSyncWithQueryParameters('');
       return <span>Hi!</span>;

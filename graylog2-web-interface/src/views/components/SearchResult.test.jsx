@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { simpleFields, simpleQueryFields } from 'fixtures/fields';
-import { render, cleanup } from 'wrappedTestingLibrary';
+import { render } from 'wrappedTestingLibrary';
 import asMock from 'helpers/mocking/AsMock';
 
 import { SearchLoadingStateStore } from 'views/stores/SearchLoadingStateStore';
@@ -44,7 +44,6 @@ describe('SearchResult', () => {
     jest.useFakeTimers();
   });
   afterEach(() => {
-    cleanup();
     jest.clearAllMocks();
   });
 

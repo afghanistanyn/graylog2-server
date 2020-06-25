@@ -1,6 +1,6 @@
 // @flow strict
 import React from 'react';
-import { render, cleanup, fireEvent } from 'wrappedTestingLibrary';
+import { render, fireEvent } from 'wrappedTestingLibrary';
 import { List } from 'immutable';
 
 import Direction from 'views/logic/aggregationbuilder/Direction';
@@ -19,7 +19,6 @@ describe('FieldSortSelect', () => {
   const fields = List([fieldTypeMapping1, fieldTypeMapping2]);
   const sort = [new SortConfig('pivot', 'http_method', Direction.Ascending)];
 
-  afterEach(cleanup);
   it('should display current sort as selected option', () => {
     const { getByText } = render(<FieldSortSelect fields={fields} onChange={() => {}} sort={sort} />);
     expect(getByText('http_method')).not.toBeNull();

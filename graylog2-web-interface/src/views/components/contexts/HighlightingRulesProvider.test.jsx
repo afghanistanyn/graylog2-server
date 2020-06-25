@@ -1,6 +1,6 @@
 // @flow strict
 import * as React from 'react';
-import { cleanup, render } from 'wrappedTestingLibrary';
+import { render } from 'wrappedTestingLibrary';
 import asMock from 'helpers/mocking/AsMock';
 
 import HighlightingRule from 'views/logic/views/formatting/highlighting/HighlightingRule';
@@ -17,8 +17,6 @@ jest.mock('views/stores/HighlightingRulesStore', () => ({
 }));
 
 describe('HighlightingRulesProvider', () => {
-  afterEach(cleanup);
-
   const renderSUT = () => {
     const consume = jest.fn();
     render(
@@ -36,7 +34,6 @@ describe('HighlightingRulesProvider', () => {
 
     expect(consume).toHaveBeenCalledWith(undefined);
   });
-
 
   it('provides highlighting rules', () => {
     const rule = HighlightingRule.builder()
